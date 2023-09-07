@@ -1,0 +1,42 @@
+import processing.serial.*;
+import cc.arduino.*;
+
+Arduino arduino;
+boolean isBlinking = false;
+
+void setup() {
+  size(400, 400); // Set the canvas size
+  background(255); // Set the background color to white
+  
+  // Initialize the Arduino
+  arduino = new Arduino(this, Arduino.list()[0], 57600); // Change [0] to [1], [2], etc., as needed
+}
+
+void draw() {
+  background(192);
+  
+  // Read the sensor input from the Arduino
+  int y = arduino.analogRead(5);
+  System.out.println(y);
+  ellipse(250, 2*y, 50, 50);
+
+  // Check if the sensor input meets the threshold for blinking
+  if (y > 500) { // Adjust the threshold value as needed
+    isBlinking = true;
+  } else {
+    isBlinking = false;
+  }
+  
+  // Draw the dog's body, head, ears, and other features as before
+  
+  // Blinking logic
+  if (isBlinking && frameCount % 60 == 0) {
+    // Every 60 frames (1 second at 60 FPS), blink the eyes
+    fill(255, 0); // Transparent white (eyes closed)
+  } else {
+    // Otherwise, keep the eyes open
+    fill(255); // White color for the eyes
+  }
+  
+  // Draw the dog's eyes, pupils, nose, mouth, and tail as before
+}
